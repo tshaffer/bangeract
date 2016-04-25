@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import TestModule from '../../electronModules/testModuleOut';
+import TestModule from '../../bangatronevices/testModuleOut';
 
 export default class App extends Component {
   render() {
