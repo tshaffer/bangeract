@@ -1,14 +1,26 @@
 import React, {Component} from 'react';
-import TestModule from '../../bangatronevices/testModuleOut';
+import ThumbServices from '../../bangatronevices/thumbServicesOut';
 
 export default class App extends Component {
-  render() {
-    let testModule = new TestModule();
-    testModule.invokeTest();
 
-    return (
-      // Add your component markup and other subcomponent references here.
-      <h1>Hello, World!</h1>
-    );
-  }
+    constructor() {
+        super();
+
+        this.thumbServices = new ThumbServices();
+    }
+
+    hitMe() {
+        console.log("hit me");
+        this.mediaLibraryThumbs = this.thumbServices.getThumbSpec();
+    }
+
+    render() {
+        debugger;
+        return (
+            <div>
+              <h1>Hello, World!</h1>
+              <button type="button" onClick={this.hitMe.bind(this)}>hit me</button>
+            </div>
+        );
+    }
 }
