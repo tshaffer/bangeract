@@ -58,17 +58,21 @@ module.exports = {
   resolve: {
     extensions: ['', '.js']
   },
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
+  target: 'atom',
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
         loaders: ['babel'],
-        include: path.join(__dirname, 'scripts')
+        /*
+         include: path.join(__dirname, 'scripts')
+         */
+        exclude: [/node_modules/]
       }
     ]
   }
