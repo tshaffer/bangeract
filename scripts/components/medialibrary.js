@@ -57,13 +57,14 @@ render () {
                 <div>Pizza</div>
             );
         }
-    
+
+        // also get thumbs from column1 or change the way it's built (the right answer)
         let mediaLibraryThumbs = this.props.thumbs.map(function (myThumb) {
             let thumb = myThumb.column0;
             console.log("look at my thumb");
             return (
-                <li className="flex-item thumbsDiv" key={thumb.id}>
-                    <img id={thumb.id} src={thumb.thumbUrl} className="thumbImg"/>
+                <li className="flex-item mediaLibraryThumbDiv" key={thumb.id}>
+                    <img id={thumb.id} src={thumb.thumbUrl} className="mediaLibraryThumbImg"/>
                     <p className="mediaLibraryThumbLbl">{thumb.fileName}</p>
                 </li>
             );
