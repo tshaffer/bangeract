@@ -22,7 +22,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className = "container baContainer">
                 <button type="button" onClick={this.hitMe.bind(this)}>hit me</button>
                 <Medialibrary thumbs = { this.state.mediaLibraryThumbs }/>
                 <Playlist />
