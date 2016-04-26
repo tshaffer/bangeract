@@ -19,7 +19,7 @@ class Playlist extends Component {
     }
 
     render () {
-        
+
         // <div class="playlistDiv" >
         //     Zone 1: Video or Images: Playlist
         //     <ul class="flex-container wrap">
@@ -34,7 +34,7 @@ class Playlist extends Component {
 
         return (
             <div className="playlistDiv">
-                Playlist
+                Zone 1: Video or Images: Playlist
             </div>
         );
     }
