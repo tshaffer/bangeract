@@ -11,30 +11,93 @@ class Playlist extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            playlistThumbs: []
         };
     }
 
     componentDidMount() {
         console.log("playlist::componentDidMount invoked");
+
+        var playlistThumb = {};
+        playlistThumb.id = "0";
+        playlistThumb.thumbUrl = "public/IMG_1624_thumb.JPG";
+        playlistThumb.stateName = "Drop item here";
+        this.setState({playlistThumbs: [playlistThumb]});
     }
+
+    playlistDragOverHandler (ev) {
+        console.log("playlistDragOverHandler");
+        ev.preventDefault();
+        // Set the dropEffect to move
+        ev.dataTransfer.dropEffect = "move";
+    }
+
+    playlistDropHandler (ev) {
+
+        let playlistThumbs = this.state.playlistThumbs;
+
+        console.log("drop");
+
+        ev.preventDefault();
+
+        // get playlist item to add to playlist
+        var path = ev.dataTransfer.getData("path");
+        var stateName = ev.dataTransfer.getData("name");
+
+        // specify playlist item to drop
+        var playlistThumb = {};
+        playlistThumb.thumbUrl = "public/" + path;
+        playlistThumb.stateName = stateName;
+
+        // figure out where to drop it
+        //      get id of playlist item that was drop target
+        //      get offset that indicates how far over user dropped thumb
+        //      if offset > half of thumb width, add thumb after target; otherwise insert thumb before target
+        var id = ev.target.id;
+        var index = Number(id);
+        var offset = ev.offsetX;
+        var insert = false;
+        if (offset < 50) {
+            insert = true;
+        }
+
+        if (insert) {
+            // insert prior to index
+            playlistThumbs.split(index, 0, playlistThumb);
+        }
+        else {
+            // add after index
+            playlistThumbs.splice(index + 1, 0, playlistThumb);
+        }
+
+        // renumber thumb id's
+        playlistThumbs.forEach(function (thumb, thumbIndex) {
+            thumb.id = thumbIndex.toString();
+        });
+
+        this.setState({playlistThumbs: playlistThumbs})
+    }
+
 
     render () {
 
-        // <div class="playlistDiv" >
-        //     Zone 1: Video or Images: Playlist
-        //     <ul class="flex-container wrap">
-        //         <li ng-repeat="thumb in playlistThumbs" class="flex-item mediaLibraryThumbDiv" ondrop="playlistDropHandler(event);" ondragover="playlistDragOverHandler(event);">
-        //             <img id="{{thumb.id}}" ng-src="{{thumb.thumbUrl}}" class="mediaLibraryThumbImg" draggable="true" ondragstart="playlistDragStartHandler(event);">
-        //                 <p class="mediaLibraryThumbLbl">{{thumb.stateName}}</p>
-        //         </li>
-        //     </ul>
-        // </div>
-
         let self = this;
+
+        let playlistThumbs = this.state.playlistThumbs.map(function (thumb) {
+            return (
+                <li className="flex-item mediaLibraryThumbDiv" key={thumb.id} onDrop={self.playlistDropHandler.bind(self)} onDragOver={self.playlistDragOverHandler}>
+                    <img id={thumb.id} src={thumb.thumbUrl} className="mediaLibraryThumbImg"/>
+                    <p className="mediaLibraryThumbLbl">{thumb.stateName}</p>
+                </li>
+            );
+        });
 
         return (
             <div className="playlistDiv">
                 Zone 1: Video or Images: Playlist
+                <ul className="playlist-flex-container wrap">
+                    {playlistThumbs}
+                </ul>
             </div>
         );
     }

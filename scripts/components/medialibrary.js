@@ -33,10 +33,7 @@ class Medialibrary extends Component {
                 <div>Pizza</div>
             );
         }
-
-        // <img id={thumb.id} src={thumb.thumbUrl} className="mediaLibraryThumbImg" data-name={thumb.fileName} data-path={thumb.path} draggable="true" ondragstart={self.mediaLibraryDragStartHandler.bind(self)(event)}/>
-
-        // also get thumbs from column1 or change the way it's built (the right answer)
+        
         let mediaLibraryThumbs = this.props.thumbs.map(function (thumb) {
             console.log("look at my thumb");
             return (
