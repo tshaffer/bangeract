@@ -59,8 +59,7 @@ render () {
         }
 
         // also get thumbs from column1 or change the way it's built (the right answer)
-        let mediaLibraryThumbs = this.props.thumbs.map(function (myThumb) {
-            let thumb = myThumb.column0;
+        let mediaLibraryThumbs = this.props.thumbs.map(function (thumb) {
             console.log("look at my thumb");
             return (
                 <li className="flex-item mediaLibraryThumbDiv" key={thumb.id}>
