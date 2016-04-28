@@ -7,25 +7,32 @@ export default class aThumbServices {
     }
 
     getThumbSpec() {
+
         console.log("alternate getThumbSpec invoked");
 
-        const url = "http://localhost:3000/";
-        const getPhotosUrl = url + "getPhotos";
+        var self = this;
 
-        $.get({
-            url: getPhotosUrl,
-            dataType: 'json',
-            cache: false,
-            success: function(data) {
-                console.log("number of photos retrieved is: " + data.photos.length.toString());
-                this.buildThumbs(data.photos);
-                // this.updatePhotos(data.photos);
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.log("errors retrieving photos");
-                console.error(getPhotosUrl, status, err.toString());
-            }.bind(this)
+        return new Promise(function(resolve, reject) {
+
+            const url = "http://localhost:3000/";
+            const getPhotosUrl = url + "getPhotos";
+
+            $.get({
+                url: getPhotosUrl,
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    console.log("number of photos retrieved is: " + data.photos.length.toString());
+                    let mediaLibraryThumbs = self.buildThumbs(data.photos);
+                    resolve(mediaLibraryThumbs);
+                }.bind(this),
+                error: function (xhr, status, err) {
+                    console.log("errors retrieving photos");
+                    console.error(getPhotosUrl, status, err.toString());
+                }.bind(this)
+            });
         });
+
     }
 
     buildThumbs(photos) {
@@ -54,7 +61,6 @@ label = thumb.fileName
             mediaLibraryThumbs.push(thumb);
         });
 
-        debugger;
         return mediaLibraryThumbs;
     }
 

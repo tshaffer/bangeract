@@ -41,7 +41,12 @@ class Medialibrary extends Component {
             // let thumbUrl = thumb.thumbUrl;
 
             // webapp version
-            let thumbUrl = "http://localhost:3000/photos/" + thumb.thumbUrl;
+            // playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
+            // thumb.thumbUrl = "public/testPhotos/New Orleans/IMG_1624_thumb.JPG"
+            let thumbUrl = "";
+            if (thumb.thumbUrl.startsWith("public")) {
+                thumbUrl = "http://localhost:3000/photos" + thumb.thumbUrl.substring(6);
+            }
 
             return (
                 <li className="flex-item mediaLibraryThumbDiv" key={thumb.id}>

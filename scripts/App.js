@@ -17,8 +17,19 @@ export default class App extends Component {
     }
 
     hitMe() {
+
         console.log("hit me");
-        this.setState( { mediaLibraryThumbs : this.thumbServices.getThumbSpec() });
+
+        var self = this;
+
+        // web app version
+        let thumbServicesPromise = this.thumbServices.getThumbSpec();
+        thumbServicesPromise.then(function(mediaLibraryThumbs) {
+            self.setState( { mediaLibraryThumbs : mediaLibraryThumbs });
+        })
+
+        // electron version
+        // this.setState( { mediaLibraryThumbs : this.thumbServices.getThumbSpec() });
     }
 
     render() {
