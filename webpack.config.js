@@ -61,9 +61,16 @@ module.exports = {
   devtool: 'source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+
+  //   new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$")),
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery"
+    })
   ],
-  target: 'atom',
+
+  // target: 'atom',
   module: {
     loaders: [
       {

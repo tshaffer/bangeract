@@ -20,7 +20,13 @@ class Playlist extends Component {
 
         var playlistThumb = {};
         playlistThumb.id = "0";
-        playlistThumb.thumbUrl = "public/IMG_1624_thumb.JPG";
+
+        // electron url
+        // playlistThumb.thumbUrl = "public/IMG_1624_thumb.JPG";
+
+        // webapp url
+        // playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/Tahoe/photo.jpg";
+        playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
         playlistThumb.stateName = "Drop item here";
         this.setState({playlistThumbs: [playlistThumb]});
     }

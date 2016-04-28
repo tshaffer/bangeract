@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import ThumbServices from '../../bangatronevices/thumbServicesOut';
+// import ThumbServices from '../../bangatronevices/thumbServicesOut';
+import ThumbServices from './aThumbServices';
 
 import Medialibrary from './components/medialibrary';
 import Playlist from './components/playlist';

@@ -36,9 +36,16 @@ class Medialibrary extends Component {
         
         let mediaLibraryThumbs = this.props.thumbs.map(function (thumb) {
             console.log("look at my thumb");
+
+            // electron version
+            // let thumbUrl = thumb.thumbUrl;
+
+            // webapp version
+            let thumbUrl = "http://localhost:3000/photos/" + thumb.thumbUrl;
+
             return (
                 <li className="flex-item mediaLibraryThumbDiv" key={thumb.id}>
-                    <img id={thumb.id} src={thumb.thumbUrl} className="mediaLibraryThumbImg" data-name={thumb.fileName} data-path={thumb.path} draggable="true" onDragStart={self.mediaLibraryDragStartHandler}/>
+                    <img id={thumb.id} src={thumbUrl} className="mediaLibraryThumbImg" data-name={thumb.fileName} data-path={thumb.path} draggable="true" onDragStart={self.mediaLibraryDragStartHandler}/>
                     <p className="mediaLibraryThumbLbl">{thumb.fileName}</p>
                 </li>
             );
