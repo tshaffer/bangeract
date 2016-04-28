@@ -55,7 +55,11 @@ label = thumb.fileName
             var thumb = {};
             thumb.id = photo.id;
             thumb.thumbUrl = "public/" + photo.thumbUrl;
-            thumb.path = photo.url;
+
+            // different from thumbServices for electron
+            // thumb.path = photo.url;
+            thumb.path = photo.thumbUrl;
+            
             thumb.fileName = photo.title;
 
             mediaLibraryThumbs.push(thumb);

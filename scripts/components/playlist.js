@@ -52,7 +52,13 @@ class Playlist extends Component {
 
         // specify playlist item to drop
         var playlistThumb = {};
-        playlistThumb.thumbUrl = "public/" + path;
+
+        // electron version
+        // playlistThumb.thumbUrl = "public/" + path;
+
+        // webapp version
+        playlistThumb.thumbUrl = "http://localhost:3000/photos/" + path;
+
         playlistThumb.stateName = stateName;
 
         // figure out where to drop it
