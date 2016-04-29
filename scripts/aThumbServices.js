@@ -14,7 +14,8 @@ export default class aThumbServices {
 
         return new Promise(function(resolve, reject) {
 
-            const url = "http://localhost:3000/";
+            // const url = "http://localhost:3000/";
+            const url = "192.168.0.108:3000/";
             const getPhotosUrl = url + "getPhotos";
 
             $.get({

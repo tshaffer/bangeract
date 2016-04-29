@@ -26,7 +26,8 @@ class Playlist extends Component {
 
         // webapp url
         // playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/Tahoe/photo.jpg";
-        playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
+        // playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
+        playlistThumb.thumbUrl = "http://192.168.0.108:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
         playlistThumb.stateName = "Drop item here";
         this.setState({playlistThumbs: [playlistThumb]});
     }
@@ -57,8 +58,11 @@ class Playlist extends Component {
         // playlistThumb.thumbUrl = "public/" + path;
 
         // webapp version
-        playlistThumb.thumbUrl = "http://localhost:3000/photos/" + path;
+        // playlistThumb.thumbUrl = "http://localhost:3000/photos/" + path;
 
+        // ba on device version
+        playlistThumb.thumbUrl = "http://192.168.0.108:3000/photos/" + path;
+        
         playlistThumb.stateName = stateName;
 
         // figure out where to drop it

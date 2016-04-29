@@ -45,7 +45,8 @@ class Medialibrary extends Component {
             // thumb.thumbUrl = "public/testPhotos/New Orleans/IMG_1624_thumb.JPG"
             let thumbUrl = "";
             if (thumb.thumbUrl.startsWith("public")) {
-                thumbUrl = "http://localhost:3000/photos" + thumb.thumbUrl.substring(6);
+                // thumbUrl = "http://localhost:3000/photos" + thumb.thumbUrl.substring(6);
+                thumbUrl = "http://192.168.0.108:3000/photos" + thumb.thumbUrl.substring(6);
             }
 
             return (
