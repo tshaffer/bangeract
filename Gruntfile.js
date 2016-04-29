@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 
         watch: {
             browserify: {
-                files: ["src/**/*.js"],
+                files: ["scripts/**/*.js"],
                 tasks: ["browserify"]
             }
         },
@@ -15,8 +15,8 @@ module.exports = function(grunt) {
                 options: {
                     transform: [["babelify", {presets: ["es2015", "react", "stage-0"]}]]
                 },
-                src: ["src/js/index.js"],
-                dest: "../server/public/bundle.js"
+                src: ["scripts/index.js"],
+                dest: "static/bundle.js"
             }
         }
 
