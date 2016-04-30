@@ -26,6 +26,8 @@ class Medialibrary extends Component {
 
     render () {
 
+        debugger;
+        
         let self = this;
 
         if (!this.props.thumbs || this.props.thumbs.length == 0) {
@@ -33,7 +35,8 @@ class Medialibrary extends Component {
                 <div>Pizza</div>
             );
         }
-        
+
+        console.log("in mediaLibrary, number of thumbs in props is: " + this.props.thumbs.length.toString());
         let mediaLibraryThumbs = this.props.thumbs.map(function (thumb) {
             console.log("look at my thumb");
 
@@ -44,10 +47,17 @@ class Medialibrary extends Component {
             // playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
             // thumb.thumbUrl = "public/testPhotos/New Orleans/IMG_1624_thumb.JPG"
             let thumbUrl = "";
-            if (thumb.thumbUrl.startsWith("public")) {
-                // thumbUrl = "http://localhost:3000/photos" + thumb.thumbUrl.substring(6);
-                thumbUrl = "http://192.168.0.108:3000/photos" + thumb.thumbUrl.substring(6);
-            }
+
+            console.log("thumb.thumbUrl is: " + thumb.thumbUrl);
+            
+            // if (thumb.thumbUrl.startsWith("public")) {
+            //     // thumbUrl = "http://localhost:3000/photos" + thumb.thumbUrl.substring(6);
+            //     thumbUrl = "http://192.168.0.108:3000/photos" + thumb.thumbUrl.substring(6);
+            //     console.log("mediaLibrary thumbUrl is: " + thumbUrl)
+            // }
+
+            // startsWith is ecma script 6 - not supported on BrightSign
+            thumbUrl = "http://192.168.0.108:3000/photos" + thumb.thumbUrl.substring(6);
 
             return (
                 <li className="flex-item mediaLibraryThumbDiv" key={thumb.id}>
