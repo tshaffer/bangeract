@@ -16,7 +16,7 @@ interface State {}
 //     startsWith(searchString: string, position?: number): boolean;
 // };
 
-class MediaLibrary extends React.Component<Props, State> {
+class MediaLibrary extends Component<Props, State> {
 
     state: Object;
 
