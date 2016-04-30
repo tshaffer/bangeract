@@ -1,13 +1,32 @@
-/**
- * Created by tedshaffer on 4/25/16.
- */
 import React, { Component } from 'react';
 
-class Medialibrary extends Component {
+class BAThumb {
+    id: string;
+    thumbUrl: string;
+    fileName: string;
+    path: string;
+}
+
+// interface Props {}
+interface Props { thumbs: BAThumb[] }
+interface State {}
+
+// the following is required if es6 is not the 'target' in tsconfig.json
+// interface String {
+//     startsWith(searchString: string, position?: number): boolean;
+// };
+
+class MediaLibrary extends React.Component<Props, State> {
+
+    state: Object;
 
     constructor(props) {
         super(props);
         this.state = {};
+
+        // experimental typescript
+        // var newState: { fred: string };
+        // newState.fred = "fred";
     }
 
     componentDidMount() {
@@ -24,17 +43,26 @@ class Medialibrary extends Component {
         ev.dataTransfer.dropEffect = "copy";
     }
 
+
     render () {
 
         let self = this;
+
+        // this.props["thumbs"] = [];
+        this.props.thumbs = [];
+
+        // examples from StackOverflow
+        // var obj: { property: string; } = { property: "foo" }
+        // var thumbs: { property: Object[]; }
+        // var thumbs2 : Object[];
 
         if (!this.props.thumbs || this.props.thumbs.length == 0) {
             return (
                 <div>Pizza</div>
             );
         }
-        
-        let mediaLibraryThumbs = this.props.thumbs.map(function (thumb) {
+
+        let mediaLibraryThumbs = this.props.thumbs.map(function (thumb: BAThumb) {
             console.log("look at my thumb");
 
             // electron version
@@ -55,7 +83,7 @@ class Medialibrary extends Component {
                 </li>
             );
         });
-        
+
         return (
             <div className="mediaLibraryDiv">
                 <ul className="flex-container wrap">
@@ -66,4 +94,4 @@ class Medialibrary extends Component {
     }
 }
 
-export default Medialibrary;
+export default MediaLibrary;
