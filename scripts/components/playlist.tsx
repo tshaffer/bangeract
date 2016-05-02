@@ -1,14 +1,23 @@
-/**
- * Created by tedshaffer on 4/25/16.
- */
-/**
- * Created by tedshaffer on 4/25/16.
- */
-import React, { Component } from 'react';
+import React = require('react');
 
-class Playlist extends Component {
+class BAThumb {
+    id: string;
+    thumbUrl: string;
+    fileName: string;
+    path: string;
+}
 
-    constructor(props) {
+class PlaylistThumb {
+    id: string;
+    thumbUrl: string;
+    stateName: string;
+}
+
+interface Props { thumbs: BAThumb[] }
+
+class Playlist extends React.Component<any, any> {
+
+    constructor(props: Props) {
         super(props);
         this.state = {
             playlistThumbs: []
@@ -18,7 +27,8 @@ class Playlist extends Component {
     componentDidMount() {
         console.log("playlist::componentDidMount invoked");
 
-        var playlistThumb = {};
+        let playlistThumb:PlaylistThumb = new PlaylistThumb();
+
         playlistThumb.id = "0";
 
         // electron url
@@ -31,14 +41,14 @@ class Playlist extends Component {
         this.setState({playlistThumbs: [playlistThumb]});
     }
 
-    playlistDragOverHandler (ev) {
+    playlistDragOverHandler (ev: any) {
         console.log("playlistDragOverHandler");
         ev.preventDefault();
         // Set the dropEffect to move
         ev.dataTransfer.dropEffect = "move";
     }
 
-    playlistDropHandler (ev) {
+    playlistDropHandler (ev: any) {
 
         let playlistThumbs = this.state.playlistThumbs;
 
@@ -51,7 +61,7 @@ class Playlist extends Component {
         var stateName = ev.dataTransfer.getData("name");
 
         // specify playlist item to drop
-        var playlistThumb = {};
+        var playlistThumb:PlaylistThumb = new PlaylistThumb();
 
         // electron version
         // playlistThumb.thumbUrl = "public/" + path;
@@ -83,19 +93,18 @@ class Playlist extends Component {
         }
 
         // renumber thumb id's
-        playlistThumbs.forEach(function (thumb, thumbIndex) {
+        playlistThumbs.forEach(function (thumb: PlaylistThumb, thumbIndex: Number) {
             thumb.id = thumbIndex.toString();
         });
 
         this.setState({playlistThumbs: playlistThumbs})
     }
 
-
     render () {
 
         let self = this;
 
-        let playlistThumbs = this.state.playlistThumbs.map(function (thumb) {
+        let playlistThumbs = this.state.playlistThumbs.map(function (thumb: PlaylistThumb) {
             return (
                 <li className="flex-item mediaLibraryThumbDiv" key={thumb.id} onDrop={self.playlistDropHandler.bind(self)} onDragOver={self.playlistDragOverHandler}>
                     <img id={thumb.id} src={thumb.thumbUrl} className="mediaLibraryThumbImg"/>
@@ -113,8 +122,6 @@ class Playlist extends Component {
             </div>
         );
     }
-
-
 }
 
 export default Playlist;

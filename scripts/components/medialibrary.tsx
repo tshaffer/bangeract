@@ -1,11 +1,19 @@
-/**
- * Created by tedshaffer on 4/25/16.
- */
-import React, { Component } from 'react';
+import React = require('react');
 
-class Medialibrary extends Component {
+class BAThumb {
+    id: string;
+    thumbUrl: string;
+    fileName: string;
+    path: string;
+}
 
-    constructor(props) {
+interface Props { thumbs: BAThumb[] }
+
+class MediaLibrary extends React.Component<Props, any> {
+
+    state: Object;
+
+    constructor(props: Props) {
         super(props);
         this.state = {};
     }
@@ -14,7 +22,7 @@ class Medialibrary extends Component {
         console.log("medialibrary::componentDidMount invoked");
     }
 
-    mediaLibraryDragStartHandler(ev) {
+    mediaLibraryDragStartHandler(ev: any) {
 
         console.log("dragStart");
         // Add the target element's id to the data transfer object
@@ -28,13 +36,16 @@ class Medialibrary extends Component {
 
         let self = this;
 
+        // this.props["thumbs"] = [];
+        // this.props.thumbs = [];
+
         if (!this.props.thumbs || this.props.thumbs.length == 0) {
             return (
                 <div>Pizza</div>
             );
         }
-        
-        let mediaLibraryThumbs = this.props.thumbs.map(function (thumb) {
+
+        let mediaLibraryThumbs = this.props.thumbs.map(function (thumb: BAThumb) {
             console.log("look at my thumb");
 
             // electron version
@@ -50,12 +61,12 @@ class Medialibrary extends Component {
 
             return (
                 <li className="flex-item mediaLibraryThumbDiv" key={thumb.id}>
-                    <img id={thumb.id} src={thumbUrl} className="mediaLibraryThumbImg" data-name={thumb.fileName} data-path={thumb.path} draggable="true" onDragStart={self.mediaLibraryDragStartHandler}/>
+                    <img id={thumb.id} src={thumbUrl} className="mediaLibraryThumbImg" data-name={thumb.fileName} data-path={thumb.path} draggable={true} onDragStart={self.mediaLibraryDragStartHandler}/>
                     <p className="mediaLibraryThumbLbl">{thumb.fileName}</p>
                 </li>
             );
         });
-        
+
         return (
             <div className="mediaLibraryDiv">
                 <ul className="flex-container wrap">
@@ -66,4 +77,4 @@ class Medialibrary extends Component {
     }
 }
 
-export default Medialibrary;
+export default MediaLibrary;
