@@ -1,4 +1,5 @@
 import React = require('react');
+import { connect } from 'react-redux';
 
 class BAThumb {
     id: string;
@@ -36,6 +37,10 @@ class MediaLibrary extends React.Component<Props, any> {
 
         let self = this;
 
+        // look at data from redux
+        console.log("media count is", this.props.media.length.toString());
+        debugger;
+        
         // this.props["thumbs"] = [];
         // this.props.thumbs = [];
 
@@ -77,4 +82,11 @@ class MediaLibrary extends React.Component<Props, any> {
     }
 }
 
-export default MediaLibrary;
+function mapStateToProps(state: any) {
+    // Whatever is returned will show up as props inside of PhotoGrid
+    return {
+        media: state.media
+    };
+}
+
+export default connect(mapStateToProps)(MediaLibrary);

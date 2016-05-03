@@ -19,6 +19,7 @@ export default class App extends React.Component<Props, any> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      media: [],
       mediaLibraryThumbs: [],
     };
 

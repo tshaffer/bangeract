@@ -14,6 +14,8 @@
     "scripts/App.tsx",
     "scripts/aThumbServices.tsx",
     "scripts/components/medialibrary.tsx",
-    "scripts/components/playlist.tsx"
+    "scripts/components/playlist.tsx",
+    "scripts/reducers/index.tsx",
+    "scripts/reducers/reducer_media.tsx"
   ]
 }
