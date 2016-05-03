@@ -9,7 +9,7 @@ class BAThumb {
     path: string;
 }
 
-// declare function $(get: any) : void;
+declare var $: any;
 
 export default class aThumbServices {
 
