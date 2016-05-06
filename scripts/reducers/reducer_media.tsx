@@ -1,4 +1,4 @@
-export default function(state = null, action) {
+export default function(state: any = null, action: any) {
     
     if (state == null) {
         return [

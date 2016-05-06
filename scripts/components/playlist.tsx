@@ -1,4 +1,80 @@
 import React = require('react');
+import bdm = require("../badm-interfaces")
+
+class DmMediaObject implements bdm.IDmMediaObject {
+
+    name : string;
+    description : string;
+
+    // Methods
+    Clone() : bdm.IDmObject {
+       return null;
+    }
+    CopyFrom(source:bdm.IDmObject) : void
+    {
+
+    };
+
+    IsEqual(other:bdm.IDmObject) : Boolean {
+        return false;
+    };
+
+    url : string;
+    isAvailable : Boolean;  // readonly - replaces FileExists
+    isLocal : Boolean;      // readonly
+}
+
+class ImagePlaylistItem implements bdm.IDmMediaPlaylistItem {
+    // IDmObject
+    name : string;
+    description : string;
+    Clone() : bdm.IDmObject {
+        return null;
+    }
+    CopyFrom(source:bdm.IDmObject) : void
+    {
+    }
+    IsEqual(other:bdm.IDmObject) : Boolean {
+        return false;
+    }
+
+    // IDmPlaylistItem
+    id: string;
+
+    // IDmMediaPlaylistItem
+    media : bdm.IDmMediaObject;
+    volume : number;
+
+    constructor(name: string) {
+        this.name = name;
+        this.media = new DmMediaObject();
+    }
+}
+
+class BAPlaylist implements bdm.IDmPlaylist {
+
+    playlistItems: bdm.IDmPlaylistItem[];
+
+    // IDmObject
+    name : string;
+    description : string;
+    Clone() : bdm.IDmObject {
+        return null;
+    }
+    CopyFrom(source:bdm.IDmObject) : void
+    {
+    }
+    IsEqual(other:bdm.IDmObject) : Boolean {
+        return false;
+    }
+
+    constructor() {
+        this.playlistItems = [];
+    }
+
+}
+
+
 
 class BAThumb {
     id: string;
@@ -17,11 +93,16 @@ interface Props { thumbs: BAThumb[] }
 
 class Playlist extends React.Component<any, any> {
 
+    baPlaylist: BAPlaylist;
+
     constructor(props: Props) {
         super(props);
         this.state = {
             playlistThumbs: []
         };
+
+        debugger;
+        this.baPlaylist = new BAPlaylist();
     }
 
     componentDidMount() {
@@ -97,7 +178,19 @@ class Playlist extends React.Component<any, any> {
             thumb.id = thumbIndex.toString();
         });
 
-        this.setState({playlistThumbs: playlistThumbs})
+        this.setState({playlistThumbs: playlistThumbs});
+
+        debugger;
+
+        // create image playlist item and add it to the playlist
+        var imagePlaylistItem = new ImagePlaylistItem(stateName);
+        imagePlaylistItem.description = "image";
+        imagePlaylistItem.id = playlistThumb.id;
+        imagePlaylistItem.media.url = playlistThumb.thumbUrl;
+        imagePlaylistItem.media.isAvailable = true;
+        imagePlaylistItem.media.isLocal = true;
+
+        this.baPlaylist.playlistItems.push(imagePlaylistItem);
     }
 
     render () {

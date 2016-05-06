@@ -39,8 +39,7 @@ class MediaLibrary extends React.Component<Props, any> {
 
         // look at data from redux
         console.log("media count is", this.props.media.length.toString());
-        debugger;
-        
+
         // this.props["thumbs"] = [];
         // this.props.thumbs = [];
 

@@ -12,6 +12,7 @@
   "files": [
     "scripts/index.tsx",
     "scripts/App.tsx",
+    "scripts/badm-interfaces.ts",
     "scripts/aThumbServices.tsx",
     "scripts/components/medialibrary.tsx",
     "scripts/components/playlist.tsx",
