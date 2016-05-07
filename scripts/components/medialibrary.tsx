@@ -6,6 +6,7 @@ class BAThumb {
     thumbUrl: string;
     fileName: string;
     path: string;
+    type: string;
 }
 
 interface Props { thumbs: BAThumb[] }
@@ -30,6 +31,7 @@ class MediaLibrary extends React.Component<Props, any> {
         // ev.dataTransfer.setData("text", ev.target.id);
         ev.dataTransfer.setData("path", ev.target.dataset.path);
         ev.dataTransfer.setData("name", ev.target.dataset.name);
+        ev.dataTransfer.setData("type", ev.target.dataset.type);
         ev.dataTransfer.dropEffect = "copy";
     }
 
@@ -65,7 +67,7 @@ class MediaLibrary extends React.Component<Props, any> {
 
             return (
                 <li className="flex-item mediaLibraryThumbDiv" key={thumb.id}>
-                    <img id={thumb.id} src={thumbUrl} className="mediaLibraryThumbImg" data-name={thumb.fileName} data-path={thumb.path} draggable={true} onDragStart={self.mediaLibraryDragStartHandler}/>
+                    <img id={thumb.id} src={thumbUrl} className="mediaLibraryThumbImg" data-name={thumb.fileName} data-path={thumb.path} data-type={thumb.type} draggable={true} onDragStart={self.mediaLibraryDragStartHandler}/>
                     <p className="mediaLibraryThumbLbl">{thumb.fileName}</p>
                 </li>
             );

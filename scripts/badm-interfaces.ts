@@ -33,7 +33,6 @@ export interface IDmMediaPlaylistItem extends IDmPlaylistItem
 {
     // Properties
     media : IDmMediaObject;
-    volume : number;
 }
 
 export interface IDmPlaylist extends IDmObject

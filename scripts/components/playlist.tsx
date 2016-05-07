@@ -12,7 +12,6 @@ class DmMediaObject implements bdm.IDmMediaObject {
     }
     CopyFrom(source:bdm.IDmObject) : void
     {
-
     };
 
     IsEqual(other:bdm.IDmObject) : Boolean {
@@ -43,11 +42,50 @@ class ImagePlaylistItem implements bdm.IDmMediaPlaylistItem {
 
     // IDmMediaPlaylistItem
     media : bdm.IDmMediaObject;
-    volume : number;
+
+    // unique to ImagePlaylistItem
+    slideDelayInterval: number;
+    slideTransition: number;
+    transitionDuration: number;
+    useImageBuffer: boolean;
+    videoPlayerRequired: boolean;
 
     constructor(name: string) {
         this.name = name;
         this.media = new DmMediaObject();
+        // initialize other member variables
+    }
+}
+
+class VideoPlaylistItem implements bdm.IDmMediaPlaylistItem {
+    // IDmObject
+    name : string;
+    description : string;
+    Clone() : bdm.IDmObject {
+        return null;
+    }
+    CopyFrom(source:bdm.IDmObject) : void
+    {
+    }
+    IsEqual(other:bdm.IDmObject) : Boolean {
+        return false;
+    }
+
+    // IDmPlaylistItem
+    id: string;
+
+    // IDmMediaPlaylistItem
+    media : bdm.IDmMediaObject;
+
+    // unique to VideoPlaylistItem
+    volume: number;
+    videoDisplayMode: string;
+    automaticallyLoop: boolean;
+
+    constructor(name: string) {
+        this.name = name;
+        this.media = new DmMediaObject();
+        // initialize other member variables
     }
 }
 
@@ -76,6 +114,8 @@ class BAPlaylist implements bdm.IDmPlaylist {
 
 
 
+
+
 class BAThumb {
     id: string;
     thumbUrl: string;
@@ -101,7 +141,6 @@ class Playlist extends React.Component<any, any> {
             playlistThumbs: []
         };
 
-        debugger;
         this.baPlaylist = new BAPlaylist();
     }
 
@@ -140,6 +179,7 @@ class Playlist extends React.Component<any, any> {
         // get playlist item to add to playlist
         var path = ev.dataTransfer.getData("path");
         var stateName = ev.dataTransfer.getData("name");
+        var type = ev.dataTransfer.getData("type");
 
         // specify playlist item to drop
         var playlistThumb:PlaylistThumb = new PlaylistThumb();
@@ -180,17 +220,27 @@ class Playlist extends React.Component<any, any> {
 
         this.setState({playlistThumbs: playlistThumbs});
 
+        if (type == "image") {
+            // create image playlist item and add it to the playlist
+            var imagePlaylistItem = new ImagePlaylistItem(stateName);
+            imagePlaylistItem.description = "image";
+            imagePlaylistItem.id = playlistThumb.id;
+            imagePlaylistItem.media.url = playlistThumb.thumbUrl;
+            imagePlaylistItem.media.isAvailable = true;
+            imagePlaylistItem.media.isLocal = true;
+            this.baPlaylist.playlistItems.push(imagePlaylistItem);
+        }
+        else {
+            var videoPlaylistItem = new VideoPlaylistItem(stateName);
+            videoPlaylistItem.description = "video";
+            videoPlaylistItem.id = playlistThumb.id;
+            videoPlaylistItem.media.url = playlistThumb.thumbUrl;
+            videoPlaylistItem.media.isAvailable = true;
+            videoPlaylistItem.media.isLocal = true;
+            this.baPlaylist.playlistItems.push(videoPlaylistItem);
+        }
+
         debugger;
-
-        // create image playlist item and add it to the playlist
-        var imagePlaylistItem = new ImagePlaylistItem(stateName);
-        imagePlaylistItem.description = "image";
-        imagePlaylistItem.id = playlistThumb.id;
-        imagePlaylistItem.media.url = playlistThumb.thumbUrl;
-        imagePlaylistItem.media.isAvailable = true;
-        imagePlaylistItem.media.isLocal = true;
-
-        this.baPlaylist.playlistItems.push(imagePlaylistItem);
     }
 
     render () {

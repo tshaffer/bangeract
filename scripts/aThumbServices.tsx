@@ -7,6 +7,7 @@ class BAThumb {
     thumbUrl: string;
     fileName: string;
     path: string;
+    type: string;
 }
 
 declare var $: any;
@@ -50,6 +51,8 @@ export default class aThumbServices {
 
         let mediaLibraryThumbs:any[] = [];
 
+        let index = 0;
+        
         photos.forEach(function (photo: any) {
             /*
              id = thumb.id
@@ -75,6 +78,14 @@ export default class aThumbServices {
 
             thumb.fileName = photo.title;
 
+            if (index == 0) {
+                thumb.type = "image";
+                index = 1;
+            }
+            else {
+                thumb.type = "video";
+                index = 0;
+            }
             mediaLibraryThumbs.push(thumb);
         });
 
