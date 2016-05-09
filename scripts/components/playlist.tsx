@@ -1,14 +1,20 @@
 import React = require('react');
-import bdm = require("../badm-interfaces")
 
-class DmMediaObject implements bdm.IDmMediaObject {
+// can't extend interfaces in Java, C#
 
+// import bdm = require("../badm-interfaces")
+// OR
+// import { IDmMediaObject, IDmObject } from "../badm-interfaces";    // intuit and industry standard approach
+// OR
+import * as bdm from "../badm-interfaces";
+
+class DmObject implements bdm.IDmObject {
     name : string;
     description : string;
 
     // Methods
     Clone() : bdm.IDmObject {
-       return null;
+        return null;
     }
     CopyFrom(source:bdm.IDmObject) : void
     {
@@ -17,11 +23,35 @@ class DmMediaObject implements bdm.IDmMediaObject {
     IsEqual(other:bdm.IDmObject) : Boolean {
         return false;
     };
+}
 
+class DmMediaObject extends DmObject implements bdm.IDmMediaObject {
     url : string;
     isAvailable : Boolean;  // readonly - replaces FileExists
     isLocal : Boolean;      // readonly
 }
+
+// class DmMediaObject implements bdm.IDmMediaObject {
+//
+//     name : string;
+//     description : string;
+//
+//     // Methods
+//     Clone() : bdm.IDmObject {
+//        return null;
+//     }
+//     CopyFrom(source:bdm.IDmObject) : void
+//     {
+//     };
+//
+//     IsEqual(other:bdm.IDmObject) : Boolean {
+//         return false;
+//     };
+//
+//     url : string;
+//     isAvailable : Boolean;  // readonly - replaces FileExists
+//     isLocal : Boolean;      // readonly
+// }
 
 class ImagePlaylistItem implements bdm.IDmMediaPlaylistItem {
     // IDmObject
