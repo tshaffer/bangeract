@@ -34,9 +34,42 @@ export interface IDmMediaPlaylistItem extends IDmPlaylistItem
     media : IDmMediaObject;
 }
 
+export const enum EventType
+{
+    MediaEnd,
+    Timer
+}
+
+export interface IDmTransition extends IDmObject
+{
+    target: IDmMediaState;
+}
+
+export interface IDmEvent extends IDmObject
+{
+    // type : EventType;
+    transitionList : [IDmTransition];
+}
+
+
+export interface IDmMediaState extends IDmObject
+{
+    // Properties
+    id : string;            // GUID
+    playlistItem : IDmPlaylistItem;
+    mediaHasBrokenLink : Boolean;   // convenience property
+    eventList : [IDmEvent];
+}
+
+
 export interface IDmPlaylist extends IDmObject
 {
 
+}
+
+export interface IDmZonePlaylist extends IDmObject
+{
+    mediaStates: [IDmMediaState]
 }
 
 

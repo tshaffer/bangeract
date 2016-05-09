@@ -25,12 +25,6 @@ class DmObject implements bdm.IDmObject {
     };
 }
 
-class DmMediaObject extends DmObject implements bdm.IDmMediaObject {
-    url : string;
-    isAvailable : Boolean;  // readonly - replaces FileExists
-    isLocal : Boolean;      // readonly
-}
-
 // class DmMediaObject implements bdm.IDmMediaObject {
 //
 //     name : string;
@@ -53,27 +47,44 @@ class DmMediaObject extends DmObject implements bdm.IDmMediaObject {
 //     isLocal : Boolean;      // readonly
 // }
 
-class ImagePlaylistItem implements bdm.IDmMediaPlaylistItem {
-    // IDmObject
-    name : string;
-    description : string;
-    Clone() : bdm.IDmObject {
-        return null;
-    }
-    CopyFrom(source:bdm.IDmObject) : void
-    {
-    }
-    IsEqual(other:bdm.IDmObject) : Boolean {
-        return false;
-    }
 
-    // IDmPlaylistItem
-    id: string;
+class DmMediaObject extends DmObject implements bdm.IDmMediaObject {
+    url : string;
+    isAvailable : Boolean;  // readonly - replaces FileExists
+    isLocal : Boolean;      // readonly
+}
 
-    // IDmMediaPlaylistItem
-    media : bdm.IDmMediaObject;
+class DmEvent extends DmObject implements bdm.IDmEvent {
+    // type : EventType;
+    transitionList : [DmTransition];
+}
 
-    // unique to ImagePlaylistItem
+class DmTransition extends DmObject implements bdm.IDmTransition {
+
+    target: DmMediaState;
+}
+
+class DmPlaylistItem extends DmObject implements bdm.IDmPlaylistItem {
+
+    id : string;            // GUID
+}
+
+class DmMediaPlaylistItem extends DmPlaylistItem implements bdm.IDmMediaPlaylistItem {
+
+    media:bdm.IDmMediaObject;
+}
+
+class DmMediaState extends DmObject implements bdm.IDmMediaState {
+
+    // Properties
+    id : string;            // GUID
+    playlistItem : DmMediaPlaylistItem;
+    mediaHasBrokenLink : Boolean;   // convenience property
+    eventList : [DmEvent];
+}
+
+class ImagePlaylistItem extends DmMediaPlaylistItem  {
+
     slideDelayInterval: number;
     slideTransition: number;
     transitionDuration: number;
@@ -81,68 +92,40 @@ class ImagePlaylistItem implements bdm.IDmMediaPlaylistItem {
     videoPlayerRequired: boolean;
 
     constructor(name: string) {
+        super();
         this.name = name;
         this.media = new DmMediaObject();
         // initialize other member variables
     }
 }
 
-class VideoPlaylistItem implements bdm.IDmMediaPlaylistItem {
-    // IDmObject
-    name : string;
-    description : string;
-    Clone() : bdm.IDmObject {
-        return null;
-    }
-    CopyFrom(source:bdm.IDmObject) : void
-    {
-    }
-    IsEqual(other:bdm.IDmObject) : Boolean {
-        return false;
-    }
+class VideoPlaylistItem extends DmMediaPlaylistItem {
 
-    // IDmPlaylistItem
-    id: string;
-
-    // IDmMediaPlaylistItem
-    media : bdm.IDmMediaObject;
-
-    // unique to VideoPlaylistItem
     volume: number;
     videoDisplayMode: string;
     automaticallyLoop: boolean;
 
     constructor(name: string) {
+        super();
         this.name = name;
         this.media = new DmMediaObject();
         // initialize other member variables
     }
 }
 
-class BAPlaylist implements bdm.IDmPlaylist {
+// class BAPlaylist extends DmObject implements bdm.IDmPlaylist {
+//
+//     playlistItems: bdm.IDmPlaylistItem[];
+//
+//     constructor() {
+//         super();
+//         this.playlistItems = [];
+//     }
+// }
 
-    playlistItems: bdm.IDmPlaylistItem[];
-
-    // IDmObject
-    name : string;
-    description : string;
-    Clone() : bdm.IDmObject {
-        return null;
-    }
-    CopyFrom(source:bdm.IDmObject) : void
-    {
-    }
-    IsEqual(other:bdm.IDmObject) : Boolean {
-        return false;
-    }
-
-    constructor() {
-        this.playlistItems = [];
-    }
-
+class DmZonePlaylist extends DmObject implements bdm.IDmZonePlaylist {
+    mediaStates: [DmMediaState]
 }
-
-
 
 
 
@@ -153,42 +136,49 @@ class BAThumb {
     path: string;
 }
 
-class PlaylistThumb {
+// class PlaylistThumb {
+//     id: string;
+//     thumbUrl: string;
+//     stateName: string;
+// }
+
+class PlaylistItemViewItem {
     id: string;
     thumbUrl: string;
     stateName: string;
 }
 
+
 interface Props { thumbs: BAThumb[] }
 
 class Playlist extends React.Component<any, any> {
 
-    baPlaylist: BAPlaylist;
+    zonePlaylist: DmZonePlaylist;
 
     constructor(props: Props) {
         super(props);
         this.state = {
-            playlistThumbs: []
+            playlistItemViewItems: []
         };
 
-        this.baPlaylist = new BAPlaylist();
+        this.zonePlaylist = new DmZonePlaylist();
     }
 
     componentDidMount() {
         console.log("playlist::componentDidMount invoked");
 
-        let playlistThumb:PlaylistThumb = new PlaylistThumb();
+        let playlistItemViewItem:PlaylistItemViewItem = new PlaylistItemViewItem();
 
-        playlistThumb.id = "0";
+        playlistItemViewItem.id = "0";
 
         // electron url
         // playlistThumb.thumbUrl = "public/IMG_1624_thumb.JPG";
 
         // webapp url
         // playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/Tahoe/photo.jpg";
-        playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
-        playlistThumb.stateName = "Drop item here";
-        this.setState({playlistThumbs: [playlistThumb]});
+        playlistItemViewItem.thumbUrl = "http://localhost:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
+        playlistItemViewItem.stateName = "Drop item here";
+        this.setState({playlistItemViewItems: [playlistItemViewItem]});
     }
 
     playlistDragOverHandler (ev: any) {
@@ -200,7 +190,7 @@ class Playlist extends React.Component<any, any> {
 
     playlistDropHandler (ev: any) {
 
-        let playlistThumbs = this.state.playlistThumbs;
+        let playlistItemViewItems = this.state.playlistItemViewItems;
 
         console.log("drop");
 
@@ -212,15 +202,15 @@ class Playlist extends React.Component<any, any> {
         var type = ev.dataTransfer.getData("type");
 
         // specify playlist item to drop
-        var playlistThumb:PlaylistThumb = new PlaylistThumb();
+        var playlistItemViewItem:PlaylistItemViewItem = new PlaylistItemViewItem();
 
         // electron version
         // playlistThumb.thumbUrl = "public/" + path;
 
         // webapp version
-        playlistThumb.thumbUrl = "http://localhost:3000/photos/" + path;
+        playlistItemViewItem.thumbUrl = "http://localhost:3000/photos/" + path;
 
-        playlistThumb.stateName = stateName;
+        playlistItemViewItem.stateName = stateName;
 
         // figure out where to drop it
         //      get id of playlist item that was drop target
@@ -236,26 +226,26 @@ class Playlist extends React.Component<any, any> {
 
         if (insert) {
             // insert prior to index
-            playlistThumbs.split(index, 0, playlistThumb);
+            playlistItemViewItems.split(index, 0, playlistItemViewItem);
         }
         else {
             // add after index
-            playlistThumbs.splice(index + 1, 0, playlistThumb);
+            playlistItemViewItems.splice(index + 1, 0, playlistItemViewItem);
         }
 
-        // renumber thumb id's
-        playlistThumbs.forEach(function (thumb: PlaylistThumb, thumbIndex: Number) {
-            thumb.id = thumbIndex.toString();
+        // renumber id's
+        playlistItemViewItems.forEach(function (playlistItemViewItem: PlaylistItemViewItem, playlistItemIndex: Number) {
+            playlistItemViewItem.id = playlistItemIndex.toString();
         });
 
-        this.setState({playlistThumbs: playlistThumbs});
+        this.setState({playlistItemViewItems: playlistItemViewItems});
 
         if (type == "image") {
             // create image playlist item and add it to the playlist
             var imagePlaylistItem = new ImagePlaylistItem(stateName);
             imagePlaylistItem.description = "image";
-            imagePlaylistItem.id = playlistThumb.id;
-            imagePlaylistItem.media.url = playlistThumb.thumbUrl;
+            imagePlaylistItem.id = playlistItemViewItem.id;
+            imagePlaylistItem.media.url = playlistItemViewItem.thumbUrl;
             imagePlaylistItem.media.isAvailable = true;
             imagePlaylistItem.media.isLocal = true;
             this.baPlaylist.playlistItems.push(imagePlaylistItem);
@@ -263,8 +253,8 @@ class Playlist extends React.Component<any, any> {
         else {
             var videoPlaylistItem = new VideoPlaylistItem(stateName);
             videoPlaylistItem.description = "video";
-            videoPlaylistItem.id = playlistThumb.id;
-            videoPlaylistItem.media.url = playlistThumb.thumbUrl;
+            videoPlaylistItem.id = playlistItemViewItem.id;
+            videoPlaylistItem.media.url = playlistItemViewItem.thumbUrl;
             videoPlaylistItem.media.isAvailable = true;
             videoPlaylistItem.media.isLocal = true;
             this.baPlaylist.playlistItems.push(videoPlaylistItem);
@@ -277,11 +267,11 @@ class Playlist extends React.Component<any, any> {
 
         let self = this;
 
-        let playlistThumbs = this.state.playlistThumbs.map(function (thumb: PlaylistThumb) {
+        let playlistItemViewItems = this.state.playlistItemViewItems.map(function (playlistItemViewItem: PlaylistItemViewItem) {
             return (
-                <li className="flex-item mediaLibraryThumbDiv" key={thumb.id} onDrop={self.playlistDropHandler.bind(self)} onDragOver={self.playlistDragOverHandler}>
-                    <img id={thumb.id} src={thumb.thumbUrl} className="mediaLibraryThumbImg"/>
-                    <p className="mediaLibraryThumbLbl">{thumb.stateName}</p>
+                <li className="flex-item mediaLibraryThumbDiv" key={playlistItemViewItem.id} onDrop={self.playlistDropHandler.bind(self)} onDragOver={self.playlistDragOverHandler}>
+                    <img id={playlistItemViewItem.id} src={playlistItemViewItem.thumbUrl} className="mediaLibraryThumbImg"/>
+                    <p className="mediaLibraryThumbLbl">{playlistItemViewItem.stateName}</p>
                 </li>
             );
         });
@@ -290,7 +280,7 @@ class Playlist extends React.Component<any, any> {
             <div className="playlistDiv">
                 Zone 1: Video or Images: Playlist
                 <ul className="playlist-flex-container wrap">
-                    {playlistThumbs}
+                    {playlistItemViewItems}
                 </ul>
             </div>
         );
