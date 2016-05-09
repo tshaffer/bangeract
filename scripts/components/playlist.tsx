@@ -1,10 +1,8 @@
 import React = require('react');
 
-// can't extend interfaces in Java, C#
-
 // import bdm = require("../badm-interfaces")
 // OR
-// import { IDmMediaObject, IDmObject } from "../badm-interfaces";    // intuit and industry standard approach
+// import { IDmMediaObject, IDmObject, etc. } from "../badm-interfaces";    // intuit and industry standard approach
 // OR
 import * as bdm from "../badm-interfaces";
 
@@ -55,7 +53,7 @@ class DmMediaObject extends DmObject implements bdm.IDmMediaObject {
 }
 
 class DmEvent extends DmObject implements bdm.IDmEvent {
-    // type : EventType;
+    type : bdm.EventType;
     transitionList : [DmTransition];
 }
 
@@ -72,15 +70,6 @@ class DmPlaylistItem extends DmObject implements bdm.IDmPlaylistItem {
 class DmMediaPlaylistItem extends DmPlaylistItem implements bdm.IDmMediaPlaylistItem {
 
     media:bdm.IDmMediaObject;
-}
-
-class DmMediaState extends DmObject implements bdm.IDmMediaState {
-
-    // Properties
-    id : string;            // GUID
-    playlistItem : DmMediaPlaylistItem;
-    mediaHasBrokenLink : Boolean;   // convenience property
-    eventList : [DmEvent];
 }
 
 class ImagePlaylistItem extends DmMediaPlaylistItem  {
@@ -123,8 +112,17 @@ class VideoPlaylistItem extends DmMediaPlaylistItem {
 //     }
 // }
 
+class DmMediaState extends DmObject implements bdm.IDmMediaState {
+
+    // Properties
+    id : string;            // GUID
+    mediaPlaylistItem :     DmMediaPlaylistItem;
+    mediaHasBrokenLink :    Boolean;   // convenience property
+    eventList :             [DmEvent];
+}
+
 class DmZonePlaylist extends DmObject implements bdm.IDmZonePlaylist {
-    mediaStates: [DmMediaState]
+    mediaStates: DmMediaState[] = new Array();
 }
 
 
@@ -142,10 +140,9 @@ class BAThumb {
 //     stateName: string;
 // }
 
-class PlaylistItemViewItem {
-    id: string;
+class PlaylistItemViewItem extends DmMediaState {
     thumbUrl: string;
-    stateName: string;
+    // stateName: string;
 }
 
 
@@ -177,7 +174,7 @@ class Playlist extends React.Component<any, any> {
         // webapp url
         // playlistThumb.thumbUrl = "http://localhost:3000/photos/testPhotos/Tahoe/photo.jpg";
         playlistItemViewItem.thumbUrl = "http://localhost:3000/photos/testPhotos/New Orleans/IMG_1624_thumb.JPG";
-        playlistItemViewItem.stateName = "Drop item here";
+        playlistItemViewItem.name = "Drop item here";
         this.setState({playlistItemViewItems: [playlistItemViewItem]});
     }
 
@@ -210,7 +207,7 @@ class Playlist extends React.Component<any, any> {
         // webapp version
         playlistItemViewItem.thumbUrl = "http://localhost:3000/photos/" + path;
 
-        playlistItemViewItem.stateName = stateName;
+        playlistItemViewItem.name = stateName;
 
         // figure out where to drop it
         //      get id of playlist item that was drop target
@@ -248,7 +245,10 @@ class Playlist extends React.Component<any, any> {
             imagePlaylistItem.media.url = playlistItemViewItem.thumbUrl;
             imagePlaylistItem.media.isAvailable = true;
             imagePlaylistItem.media.isLocal = true;
-            this.baPlaylist.playlistItems.push(imagePlaylistItem);
+
+            let mediaState: DmMediaState = new DmMediaState();
+            mediaState.mediaPlaylistItem = imagePlaylistItem;
+            this.zonePlaylist.mediaStates.push(mediaState);
         }
         else {
             var videoPlaylistItem = new VideoPlaylistItem(stateName);
@@ -257,10 +257,11 @@ class Playlist extends React.Component<any, any> {
             videoPlaylistItem.media.url = playlistItemViewItem.thumbUrl;
             videoPlaylistItem.media.isAvailable = true;
             videoPlaylistItem.media.isLocal = true;
-            this.baPlaylist.playlistItems.push(videoPlaylistItem);
-        }
 
-        debugger;
+            let mediaState: DmMediaState = new DmMediaState();
+            mediaState.mediaPlaylistItem = videoPlaylistItem;
+            this.zonePlaylist.mediaStates.push(mediaState);
+        }
     }
 
     render () {
@@ -271,7 +272,7 @@ class Playlist extends React.Component<any, any> {
             return (
                 <li className="flex-item mediaLibraryThumbDiv" key={playlistItemViewItem.id} onDrop={self.playlistDropHandler.bind(self)} onDragOver={self.playlistDragOverHandler}>
                     <img id={playlistItemViewItem.id} src={playlistItemViewItem.thumbUrl} className="mediaLibraryThumbImg"/>
-                    <p className="mediaLibraryThumbLbl">{playlistItemViewItem.stateName}</p>
+                    <p className="mediaLibraryThumbLbl">{playlistItemViewItem.name}</p>
                 </li>
             );
         });

@@ -56,9 +56,9 @@ export interface IDmMediaState extends IDmObject
 {
     // Properties
     id : string;            // GUID
-    playlistItem : IDmPlaylistItem;
-    mediaHasBrokenLink : Boolean;   // convenience property
-    eventList : [IDmEvent];
+    mediaPlaylistItem :     IDmPlaylistItem;
+    mediaHasBrokenLink :    Boolean;   // convenience property
+    eventList :             [IDmEvent];
 }
 
 
@@ -69,7 +69,7 @@ export interface IDmPlaylist extends IDmObject
 
 export interface IDmZonePlaylist extends IDmObject
 {
-    mediaStates: [IDmMediaState]
+    mediaStates: IDmMediaState[]
 }
 
 
