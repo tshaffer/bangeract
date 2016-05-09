@@ -69,7 +69,7 @@ class DmPlaylistItem extends DmObject implements bdm.IDmPlaylistItem {
 
 class DmMediaPlaylistItem extends DmPlaylistItem implements bdm.IDmMediaPlaylistItem {
 
-    media:bdm.IDmMediaObject;
+    media:bdm.IDmMediaObject = new DmMediaObject();
 }
 
 class ImagePlaylistItem extends DmMediaPlaylistItem  {
@@ -83,7 +83,7 @@ class ImagePlaylistItem extends DmMediaPlaylistItem  {
     constructor(name: string) {
         super();
         this.name = name;
-        this.media = new DmMediaObject();
+        // this.media = new DmMediaObject();
         // initialize other member variables
     }
 }
@@ -102,16 +102,6 @@ class VideoPlaylistItem extends DmMediaPlaylistItem {
     }
 }
 
-// class BAPlaylist extends DmObject implements bdm.IDmPlaylist {
-//
-//     playlistItems: bdm.IDmPlaylistItem[];
-//
-//     constructor() {
-//         super();
-//         this.playlistItems = [];
-//     }
-// }
-
 class DmMediaState extends DmObject implements bdm.IDmMediaState {
 
     // Properties
@@ -127,12 +117,12 @@ class DmZonePlaylist extends DmObject implements bdm.IDmZonePlaylist {
 
 
 
-class BAThumb {
-    id: string;
-    thumbUrl: string;
-    fileName: string;
-    path: string;
-}
+// class BAThumb {
+//     id: string;
+//     thumbUrl: string;
+//     fileName: string;
+//     path: string;
+// }
 
 // class PlaylistThumb {
 //     id: string;
@@ -142,18 +132,19 @@ class BAThumb {
 
 class PlaylistItemViewItem extends DmMediaState {
     thumbUrl: string;
-    // stateName: string;
 }
 
 
-interface Props { thumbs: BAThumb[] }
+// interface Props { thumbs: BAThumb[] }
 
 class Playlist extends React.Component<any, any> {
 
     zonePlaylist: DmZonePlaylist;
 
-    constructor(props: Props) {
-        super(props);
+    constructor() {
+    // constructor(props: Props) {
+    //     super(props);
+        super();
         this.state = {
             playlistItemViewItems: []
         };
@@ -262,6 +253,8 @@ class Playlist extends React.Component<any, any> {
             mediaState.mediaPlaylistItem = videoPlaylistItem;
             this.zonePlaylist.mediaStates.push(mediaState);
         }
+
+        // add dropped playlistItem to data model!!
     }
 
     render () {
