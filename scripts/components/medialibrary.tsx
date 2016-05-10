@@ -9,7 +9,7 @@ class BAThumb {
     type: string;
 }
 
-interface Props { thumbs: BAThumb[] }
+interface Props { thumbs: BAThumb[], media: any }
 
 class MediaLibrary extends React.Component<Props, any> {
 
